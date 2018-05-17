@@ -15,7 +15,7 @@
     </properties>
 
     <build>
-        <finalName>MyJerseyRestService</finalName>
+        <finalName>SpringRestWebPage</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -28,14 +28,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.1</version>
+
                 <configuration>
-                    <webXml>web.xml</webXml>
+                    <webXml>WEB-INF/web.xml</webXml>
+
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
+                    <webResources>
+                        <resource>
+                            <filtering>false</filtering>
+                            <targetPath>WEB-INF</targetPath>
+                            <directory>WEB-INF</directory>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
 
@@ -77,6 +85,18 @@
             <version>1.2</version>
         </dependency>
 
+        <!--&lt;!&ndash; bridge jck to slf4j &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>jcl-over-slf4j</artifactId>-->
+            <!--&lt;!&ndash;<version>${jcl.slf4j.version}</version>&ndash;&gt;-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>ch.qos.logback</groupId>-->
+            <!--<artifactId>logback-classic</artifactId>-->
+            <!--&lt;!&ndash;<version>${logback.version}</version>&ndash;&gt;-->
+        <!--</dependency>-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
