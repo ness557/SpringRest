@@ -14,6 +14,6 @@ public class WelcomeController implements Controller {
     public ModelAndView handleRequest(HttpServletRequest httpServletRequest,
                                                  HttpServletResponse httpServletResponse) {
 
-        return new ModelAndView("mypage", "mypage message", "Hello");
+        return new ModelAndView("page-mypage", "mypage message", "Hello");
     }
 }

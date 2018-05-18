@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
 
-public class ProcessStudent extends AbstractController {
+public class ProcessStudentController extends AbstractController {
 
     @Override
     protected ModelAndView handleRequestInternal(HttpServletRequest request,
@@ -30,7 +30,7 @@ public class ProcessStudent extends AbstractController {
 
         Student student = new Student(1, name, group);
 
-        ModelAndView mnv = new ModelAndView("studentprocess");
+        ModelAndView mnv = new ModelAndView("page-studentprocess");
         mnv.addObject("student", student);
 
         return mnv;

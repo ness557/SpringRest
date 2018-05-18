@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-    	http://www.springframework.org/schema/beans/spring-beans.xsd">
+    	http://www.springframework.org/schema/beans/spring-beans.xsd
+    	http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:property-placeholder location="WEB-INF/application.properties"/>
 
     <!-- Define Spring MVC view resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/view/" />
         <property name="suffix" value=".jsp" />
+        <property name="viewNames" value="page-*"/>
     </bean>
 
-    <!--<bean id="HandlerMapping1" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>-->
-
-    <!--<bean name="/welcome" class="controller.WelcomeController" />-->
-    <!--<bean name="/student" class="controller.StudentController" />-->
-    <!--<bean name="/process" class="controller.ProcessStudent" />-->
 
     <bean id="welcomeController" class="controller.WelcomeController"/>
     <bean id="studentController" class="controller.StudentController"/>
-    <bean id="processController" class="controller.ProcessStudent"/>
+    <bean id="processController" class="controller.ProcessStudentController"/>
+
+    <bean id="restController" class="controller.RestController">
+
+        <constructor-arg name="studentService" ref="studentService"/>
+    </bean>
 
     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>
     <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -28,10 +35,29 @@
                 /welcome=welcomeController
                 /student=studentController
                 /process=processController
+                /rest/student=restController
             </value>
         </property>
         <property name="order" value="0"/>
     </bean>
 
+    <bean id="jdbcConnector" class="jdbc.JdbcConnector">
+        
+        <constructor-arg name="url" value="${jdbc.url}"/>
+        <constructor-arg name="driver" value="${jdbc.driver}"/>
+        <constructor-arg name="username" value="${jdbc.username}"/>
+        <constructor-arg name="password" value="${jdbc.password}"/>
+
+    </bean> 
+
+    <bean id="studentRepository" class="repository.StudentJdbcRepository">
+
+        <constructor-arg name="connector" ref="jdbcConnector"/>
+    </bean>
+
+    <bean id="studentService" class="service.StudentServiceImpl">
+
+        <constructor-arg name="repository" ref="studentRepository"/>
+    </bean>
 
 </beans>

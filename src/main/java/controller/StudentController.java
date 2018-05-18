@@ -13,10 +13,9 @@ public class StudentController extends AbstractController {
     protected ModelAndView handleRequestInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
 
 
-        ModelAndView mnv = new ModelAndView("studentform", "student message", "Hello");
+        ModelAndView mnv = new ModelAndView("page-studentform", "student message", "Hello");
         mnv.addObject("student", new Student(1, "example name", "example group"));
         mnv.addObject("abc", "abc");
-
 
         return mnv;
     }

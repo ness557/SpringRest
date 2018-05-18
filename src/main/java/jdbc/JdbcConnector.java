@@ -14,27 +14,13 @@ public class JdbcConnector {
     private Properties properties;
     private Connection connection;
 
-    public JdbcConnector(String propertiesFilePath) {
+    public JdbcConnector(String url, String driver, String username, String password) {
 
-        try {
-            Properties readedProperties = new Properties();
-
-
-            if (propertiesFilePath != null) {
-                FileInputStream in = new FileInputStream(propertiesFilePath);
-                readedProperties.load(in);
-                in.close();
-
-                properties = new Properties();
-                url = readedProperties.getProperty("jdbc.url");
-                driver = readedProperties.getProperty("jdbc.driver");
-                properties.setProperty("user", readedProperties.getProperty("jdbc.username"));
-                properties.setProperty("password", readedProperties.getProperty("jdbc.password"));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        properties = new Properties();
+        this.url = url;
+        this.driver = driver;
+        properties.setProperty("user", username);
+        properties.setProperty("password", password);
     }
 
 
