@@ -53,7 +53,7 @@
                 <version>2.2</version>
                 <configuration>
                     <server>Tomcat</server>
-                    <path>/springRestWeb</path>
+                    <path>/springSimpleWeb</path>
                 </configuration>
             </plugin>
         </plugins>
