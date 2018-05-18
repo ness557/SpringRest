@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
     	http://www.springframework.org/schema/beans/spring-beans.xsd
+    	http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
     	http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
+
+    <context:component-scan base-package="ness" />
+
+    <mvc:annotation-driven/>
 
     <context:property-placeholder location="WEB-INF/application.properties"/>
 
@@ -18,33 +25,10 @@
         <property name="viewNames" value="page-*"/>
     </bean>
 
-
-    <bean id="welcomeController" class="controller.WelcomeController"/>
-    <bean id="studentController" class="controller.StudentController"/>
-    <bean id="processController" class="controller.ProcessStudentController"/>
-
-    <bean id="restController" class="controller.RestController">
-
-        <constructor-arg name="studentService" ref="studentService"/>
-    </bean>
-
-    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"/>
-    <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-        <property name="mappings">
-            <value>
-                /welcome=welcomeController
-                /student=studentController
-                /process=processController
-                /rest/student=restController
-            </value>
-        </property>
-        <property name="order" value="0"/>
-    </bean>
-
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="model" />
+        <property name="packagesToScan" value="ness.model" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
@@ -61,12 +45,12 @@
         <property name="password" value="${jdbc.password}" />
     </bean>
 
-    <bean id="studentRepository" class="repository.StudentHibernateRepository">
+    <bean id="studentRepository" class="ness.repository.StudentHibernateRepository">
 
         <constructor-arg name="mySessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="studentService" class="service.StudentServiceImpl">
+    <bean id="studentService" class="ness.service.StudentServiceImpl">
 
         <constructor-arg name="repository" ref="studentRepository"/>
     </bean>
