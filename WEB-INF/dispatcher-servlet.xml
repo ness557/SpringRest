@@ -41,18 +41,38 @@
         <property name="order" value="0"/>
     </bean>
 
-    <bean id="jdbcConnector" class="jdbc.JdbcConnector">
-        
-        <constructor-arg name="url" value="${jdbc.url}"/>
-        <constructor-arg name="driver" value="${jdbc.driver}"/>
-        <constructor-arg name="username" value="${jdbc.username}"/>
-        <constructor-arg name="password" value="${jdbc.password}"/>
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="model" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+            </props>
+        </property>
+    </bean>
 
-    </bean> 
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 
-    <bean id="studentRepository" class="repository.StudentJdbcRepository">
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
 
-        <constructor-arg name="connector" ref="jdbcConnector"/>
+
+    <!--<bean id="transactionManager"-->
+          <!--class="org.springframework.orm.hibernate4.HibernateTransactionManager">-->
+        <!--<property name="sessionFactory" ref="sessionFactory" />-->
+    <!--</bean>-->
+
+    <!--<bean id="persistenceExceptionTranslationPostProcessor"-->
+          <!--class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>-->
+
+    <bean id="studentRepository" class="repository.StudentHibernateRepository">
+
+        <constructor-arg name="mySessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="studentService" class="service.StudentServiceImpl">

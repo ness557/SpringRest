@@ -1,18 +1,27 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
 
 @XmlRootElement
+@Entity
+@Table(name = "students")
 public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
     private int id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "groupp")
     private String group;
 
     public Student() {
