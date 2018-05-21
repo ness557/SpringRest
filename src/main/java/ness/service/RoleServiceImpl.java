@@ -16,7 +16,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     public RoleServiceImpl(RoleCrudRepository roleCrudRepository){
-
         this.repository = roleCrudRepository;
     }
 
@@ -38,10 +37,11 @@ public class RoleServiceImpl implements RoleService {
     public int updateRole(Role role) {
         logger.info("Trying to update role " + role);
 
-        Role rolee = repository.getOne(role.getId());
+        Role rolee = repository.getById(role.getId());
         if(rolee != null){
             rolee.setName(role.getName());
             repository.save(rolee);
+            logger.info("Role updated");
             return 1;
         }
         logger.info("Role NOT updated");
@@ -52,9 +52,7 @@ public class RoleServiceImpl implements RoleService {
     public int removeRole(Role role) {
         logger.info("Trying to delete role " + role);
 
-        if (repository.existsByIdAndName(
-                role.getId(),
-                role.getName())) {
+        if (repository.existsById(role.getId())) {
             repository.delete(role);
             if (!repository.existsById(role.getId())) {
                 logger.info("Role deleted");
@@ -83,7 +81,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleById(int id) {
         logger.info("Trying to find role by id = " + id);
-        Role role = repository.getOne(id);
+        Role role = repository.getById(id);
 
         if (role != null)
             logger.info("Role found: " + role);
@@ -95,7 +93,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getRoles() {
-        logger.info("Trying to get student list");
+        logger.info("Trying to get roles list");
 
         List<Role> roles = repository.findAll();
 
@@ -105,5 +103,18 @@ public class RoleServiceImpl implements RoleService {
             logger.info("Got list");
 
         return roles;
+    }
+
+    @Override
+    public Role findRoleByName(String name) {
+        logger.info("Trying to find role by name = " + name);
+        Role role = repository.findByName(name);
+
+        if (role != null)
+            logger.info("Role found: " + role);
+        else
+            logger.info("Role NOT found");
+
+        return role;
     }
 }

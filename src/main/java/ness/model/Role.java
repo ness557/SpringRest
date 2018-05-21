@@ -26,7 +26,7 @@ public class Role {
                     CascadeType.MERGE,
                     CascadeType.PERSIST
             },
-            mappedBy = "roles")
+            mappedBy = "users")
     private Set<User> users = new HashSet<>();
 
     public Role() {

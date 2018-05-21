@@ -20,9 +20,6 @@ public class UserInfo {
     @Column(name = "phone")
     private int phone;
 
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "users")
-//    private User user;
-
     public int getId() {
         return id;
     }
@@ -47,14 +44,6 @@ public class UserInfo {
         this.phone = phone;
     }
 
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,7 +52,6 @@ public class UserInfo {
         return id == userInfo.id &&
                 phone == userInfo.phone &&
                 Objects.equals(email, userInfo.email) ;
-//                && Objects.equals(user, userInfo.user);
     }
 
     @Override
@@ -72,7 +60,6 @@ public class UserInfo {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", phone=" + phone +
-//                ", user_id=" + user.getId() +
                 '}';
     }
 }

@@ -22,7 +22,7 @@ public class User {
     @Column
     private String lastName;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private UserInfo userInfo;
 
     @ManyToMany(fetch = FetchType.LAZY,
