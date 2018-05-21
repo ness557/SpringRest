@@ -47,6 +47,7 @@
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.show_sql">${show_sql}</prop>
             </props>
         </property>
         <property name="packagesToScan" value="ness.model" />

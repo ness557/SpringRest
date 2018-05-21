@@ -13,12 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
-public class MyRestController {
+public class StudentRestController {
 
     private StudentService service;
 
     @Autowired
-    public MyRestController(StudentService studentService) {
+    public StudentRestController(StudentService studentService) {
 
         this.service = studentService;
     }
