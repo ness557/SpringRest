@@ -36,7 +36,7 @@ public class StudentRestController {
 
     }
 
-    @RequestMapping(value = "students", method = RequestMethod.PUT)
+    @RequestMapping(value = "/students", method = RequestMethod.PUT)
     public int putStudent(@RequestParam(value = "id") int id,
                           @RequestParam(value = "name") String name,
                           @RequestParam(value = "group") String group) {
@@ -44,14 +44,14 @@ public class StudentRestController {
         return service.addStudent(new Student(id, name, group));
     }
 
-    @RequestMapping(value = "students", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/students", method = RequestMethod.DELETE)
     public int deleteStudent(@RequestParam(value = "id") int id){
 
         return service.removeStudent(id);
 
     }
 
-    @RequestMapping(value = "students", method = RequestMethod.POST)
+    @RequestMapping(value = "/students", method = RequestMethod.POST)
     public int updateStudent(@RequestParam(value = "id") int id,
                              @RequestParam(value = "name") String name,
                              @RequestParam(value = "group") String group){
