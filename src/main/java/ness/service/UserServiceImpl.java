@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
         boolean isExists = repository.existsById(user.getId());
 
+
         if (!isExists && repository.save(user) != null) {
             logger.info("user added");
             return 1;

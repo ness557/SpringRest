@@ -24,12 +24,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     public int addUserInfo(UserInfo userInfo) {
         logger.info("Trying to add user_info " + userInfo);
 
-        boolean isExists = repository.existsById(userInfo.getId());
-
-        if (!isExists && repository.save(userInfo) != null) {
+        UserInfo info = repository.save(userInfo);
+        if (info != null) {
             logger.info("User_info added");
-            return 1;
+            System.out.println(userInfo.toString());
+            return userInfo.getId();
         }
+
         logger.info("User_info NOT added");
         return 0;
     }

@@ -24,18 +24,18 @@ import java.util.Set;
 public class UserWebController {
 
     private UserService userService;
-    private UserInfoService infoService;
     private RoleService roleService;
+    private UserInfoService infoService;
 
     @Autowired
-    public UserWebController(UserService userService, UserInfoService userInfoService, RoleService roleService) {
+    public UserWebController(UserService userService, RoleService roleService, UserInfoService userInfoService) {
         this.userService = userService;
-        this.infoService = userInfoService;
         this.roleService = roleService;
+        this.infoService = userInfoService;
     }
 
     @RequestMapping
-    public String index(){
+    public String index() {
 
         return "redirect:users/list";
     }
@@ -72,6 +72,8 @@ public class UserWebController {
     @RequestMapping(value = "/remove", method = RequestMethod.GET)
     public String deleteUser(@RequestParam(value = "id") int id) {
 
+
+//        infoService.removeUserInfo(userService.getUserById(id).getUserInfo().getId());
         userService.removeUser(id);
         return "redirect:list";
     }
@@ -83,7 +85,7 @@ public class UserWebController {
         System.out.println(result1 + "\n" + result2);
         Set<Role> roleSet = new HashSet<>();
 
-        for (String roleName: roles.split(",")) {
+        for (String roleName : roles.split(",")) {
             Role role = roleService.findRoleByName(
                     StringUtils.deleteWhitespace(roleName));
             roleSet.add(role);
@@ -91,7 +93,11 @@ public class UserWebController {
 
         user.setRoles(roleSet);
 
-        userService.saveOrUpdate(user);
+        if (user.getId() == 0) {
+
+            userService.addUser(user);
+        } else
+            userService.updateUser(user);
 
         return "redirect:list";
     }
