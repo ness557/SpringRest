@@ -22,7 +22,7 @@ public class RoleRestController {
         service = roleService;
     }
 
-    @RequestMapping(value = "roles", method = RequestMethod.GET)
+    @RequestMapping(value = "/roles", method = RequestMethod.GET)
     public List<Role> getRoles(@RequestParam(value = "id", required = false) Integer id){
 
         if(id != null)
@@ -33,7 +33,7 @@ public class RoleRestController {
             return service.getRoles();
     }
 
-    @RequestMapping(value = "roles", method = RequestMethod.PUT)
+    @RequestMapping(value = "/roles", method = RequestMethod.PUT)
     public int putRole(@RequestParam(value = "name") String name){
 
         Role role = new Role();

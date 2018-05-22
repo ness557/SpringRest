@@ -1,0 +1,79 @@
+
+--roles table 
+CREATE TABLE roles (
+  ID NUMBER(10) NOT NULL,
+  NAME varchar2(20) NOT NULL,
+  CONSTRAINT roles_pk 
+    PRIMARY KEY (ID));
+
+CREATE SEQUENCE role_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER role_bir
+  BEFORE INSERT ON roles
+  FOR EACH ROW
+
+  BEGIN
+    SELECT role_seq.NEXTVAL
+    INTO   :new.id
+    FROM   dual;
+  END;
+/
+
+
+-- user info table
+CREATE TABLE USER_INFO (
+  ID NUMBER(10) NOT NULL,
+  EMAIL varchar2(40) NOT NULL,
+  PHONE NUMBER(10) NOT NULL,
+  CONSTRAINT 
+    userinfo_pk PRIMARY KEY (ID));
+
+CREATE SEQUENCE userinfo_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER userinfo_bir
+  BEFORE INSERT ON roles
+  FOR EACH ROW
+
+  BEGIN
+    SELECT userinfo_seq.NEXTVAL
+    INTO   :new.id
+    FROM   dual;
+  END;
+/
+
+
+--user table
+CREATE TABLE users (
+  ID NUMBER(10) NOT NULL,
+  FIRSTNAME varchar2(40) NOT NULL,
+  LASTNAME varchar2(40) NOT NULL,
+  USERINFO_ID NUMBER(10) NOT NULL,
+  CONSTRAINT 
+    users_pk PRIMARY KEY (ID),
+  CONSTRAINT fk_userinfo 
+  FOREIGN KEY (USERINFO_ID)
+    REFERENCES USER_INFO(ID));
+
+CREATE SEQUENCE users_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER users_bir
+  BEFORE INSERT ON roles
+  FOR EACH ROW
+
+  BEGIN
+    SELECT users_seq.NEXTVAL
+    INTO   :new.id
+    FROM   dual;
+  END;
+/
+
+-- user_role table
+CREATE TABLE USER_ROLE (
+  USER_ID NUMBER(10) NOT NULL,
+  ROLE_ID NUMBER(10) NOT NULL);
+
+-- student table
+CREATE TABLE STUDENT(
+  ID NUMBER(10) NOT NULL,
+  NAME varchar2(40) NOT NULL,
+  GROUPP varchar2(40) NOT NULL);

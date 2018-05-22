@@ -37,7 +37,7 @@ public class UserWebController {
     @RequestMapping
     public String index(){
 
-        return "redirect:list";
+        return "redirect:users/list";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
