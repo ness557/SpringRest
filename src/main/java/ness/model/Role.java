@@ -22,11 +22,7 @@ public class Role {
     private String name;
 
     @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST
-            },
-            mappedBy = "users")
+            mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
     public Role() {
@@ -56,11 +52,11 @@ public class Role {
         this.users = users;
     }
 
-    public boolean addUser(User user){
+    public boolean addUser(User user) {
         return users.add(user);
     }
 
-    public boolean removeUser(User user){
+    public boolean removeUser(User user) {
         return users.remove(user);
     }
 

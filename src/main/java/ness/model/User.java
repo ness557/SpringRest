@@ -22,13 +22,13 @@ public class User {
     @Column
     private String lastName;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.MERGE,
-                    CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public User() {
@@ -80,6 +80,19 @@ public class User {
 
     public boolean removeRole(Role role){
         return roles.remove(role);
+    }
+
+    public String getRolesString(){
+
+        StringBuilder buf = new StringBuilder();
+        for (Role role: roles) {
+            buf.append(role.getName());
+            buf.append(", ");
+        }
+        String res = buf.toString();
+        if(res.isEmpty())
+            return "";
+        return res.substring(0, res.length()-2);
     }
 
     @Override

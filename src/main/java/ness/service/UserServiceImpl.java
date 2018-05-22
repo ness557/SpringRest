@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Service
-public class UserServiceImpl implements UserService{
-    
+public class UserServiceImpl implements UserService {
+
     private UserCrudRepository repository;
     private Logger logger = Logger.getLogger(getClass().getName());
-    
+
     @Autowired
-    public UserServiceImpl(UserCrudRepository userCrudRepository){
+    public UserServiceImpl(UserCrudRepository userCrudRepository) {
         this.repository = userCrudRepository;
     }
 
@@ -69,6 +69,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public int saveOrUpdate(User user) {
+        logger.info("Trying to save or update user " + user);
+
+        user = repository.save(user);
+        if (user != null) {
+            logger.info("user updated");
+            return 1;
+        } else {
+            logger.info("user NOT updated");
+            return 0;
+        }
+    }
+
+    @Override
     public int removeUser(int id) {
         logger.info("Trying to delete user by id = " + id);
 
@@ -93,7 +107,8 @@ public class UserServiceImpl implements UserService{
         else
             logger.info("User_info NOT found");
 
-        return user;    }
+        return user;
+    }
 
     @Override
     public List<User> getUserList() {

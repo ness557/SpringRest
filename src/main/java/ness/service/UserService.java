@@ -9,6 +9,7 @@ public interface UserService {
     int addUser(User user);
     int updateUser(User user);
     int removeUser(User user);
+    int saveOrUpdate(User user);
     int removeUser(int id);
     User getUserById(int id);
     List<User> getUserList();

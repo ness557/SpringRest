@@ -10,11 +10,11 @@ import ness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,11 +34,17 @@ public class UserWebController {
         this.roleService = roleService;
     }
 
+    @RequestMapping
+    public String index(){
+
+        return "redirect:list";
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String getUsers(Model model) {
 
-        model.addAttribute("users list", userService.getUserList());
-        return "show_users";
+        model.addAttribute("usersList", userService.getUserList());
+        return "show_user";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -46,9 +52,9 @@ public class UserWebController {
 
         User user = new User();
         UserInfo info = new UserInfo();
+        user.setUserInfo(info);
 
         model.addAttribute("user", user)
-                .addAttribute("info", info)
                 .addAttribute("roleList", roleService.getRoles());
         return "form_user";
     }
@@ -58,7 +64,6 @@ public class UserWebController {
 
         User user = userService.getUserById(id);
         model.addAttribute("user", user)
-                .addAttribute("info", user.getUserInfo())
                 .addAttribute("roleList", roleService.getRoles());
 
         return "form_user";
@@ -68,13 +73,14 @@ public class UserWebController {
     public String deleteUser(@RequestParam(value = "id") int id) {
 
         userService.removeUser(id);
-        return "redirect:/list";
+        return "redirect:list";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("user") User user,
-                           @ModelAttribute("info") UserInfo info,
-                           @ModelAttribute("roles") String roles) {
+    public String saveUser(@ModelAttribute("user") User user, BindingResult result1,
+                           @ModelAttribute("rolesString") String roles, BindingResult result2) {
+
+        System.out.println(result1 + "\n" + result2);
         Set<Role> roleSet = new HashSet<>();
 
         for (String roleName: roles.split(",")) {
@@ -83,10 +89,11 @@ public class UserWebController {
             roleSet.add(role);
         }
 
-        user.setUserInfo(info);
         user.setRoles(roleSet);
 
-        return "redirect:/list";
+        userService.saveOrUpdate(user);
+
+        return "redirect:list";
     }
 
 }
