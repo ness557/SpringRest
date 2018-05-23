@@ -4,7 +4,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <!-- db init script-->
+    <!-- DB init script-->
     <include file="classpath:/db/db.changelog-1.0.xml"/>
+
+    <!-- Insert values script-->
+    <include file="classpath:/db/db.changelog-1.1.xml"/>
 
 </databaseChangeLog>
