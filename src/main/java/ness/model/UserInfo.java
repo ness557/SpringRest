@@ -11,7 +11,8 @@ public class UserInfo {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "SequenceIdGenerator", sequenceName = "USERINFO_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SequenceIdGenerator")
     private int id;
 
     @Column(name = "email")

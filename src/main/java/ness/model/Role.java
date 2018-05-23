@@ -15,7 +15,8 @@ import java.util.Set;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "SequenceIdGenerator", sequenceName = "ROLE_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SequenceIdGenerator")
     private int id;
 
     @Column(name = "name")

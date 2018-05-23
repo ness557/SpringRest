@@ -13,7 +13,8 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "SequenceIdGenerator", sequenceName = "USERS_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SequenceIdGenerator")
     private int id;
 
     @Column(name = "firstname")
@@ -26,6 +27,7 @@ public class User {
     @JoinColumn(name = "userinfo_id")
     private UserInfo userInfo;
 
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -34,6 +36,7 @@ public class User {
 
     public User() {
     }
+
 
     public int getId() {
         return id;
@@ -82,6 +85,7 @@ public class User {
     public boolean removeRole(Role role){
         return roles.remove(role);
     }
+
 
     public String getRolesString(){
 
