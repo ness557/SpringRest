@@ -1,0 +1,112 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <!-- Id sequences -->
+    <changeSet author="ness" id="db-init2">
+        <createSequence cacheSize="20" cycle="false" incrementBy="1" maxValue="9999999999999999999999999999"
+                        minValue="0" ordered="false" sequenceName="ROLE_SEQ" startValue="0"/>
+    </changeSet>
+    <changeSet author="ness" id="db-init3">
+        <createSequence cacheSize="20" cycle="false" incrementBy="1" maxValue="9999999999999999999999999999"
+                        minValue="0" ordered="false" sequenceName="USERINFO_SEQ" startValue="0"/>
+    </changeSet>
+    <changeSet author="ness" id="db-init4">
+        <createSequence cacheSize="20" cycle="false" incrementBy="1" maxValue="9999999999999999999999999999"
+                        minValue="0" ordered="false" sequenceName="USERS_SEQ" startValue="0"/>
+    </changeSet>
+
+    <!-- Roles table -->
+    <changeSet author="ness" id="db-init5">
+        <createTable tableName="ROLES">
+            <column name="ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR2(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--Students table -->
+    <changeSet author="ness" id="db-init6">
+        <createTable tableName="STUDENTS">
+            <column name="ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR2(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="GROUPP" type="VARCHAR2(40)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Users table -->
+    <changeSet author="ness" id="db-init7">
+        <createTable tableName="USERS">
+            <column name="ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="FIRSTNAME" type="VARCHAR2(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="LASTNAME" type="VARCHAR2(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="USERINFO_ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Users info table -->
+    <changeSet author="ness" id="db-init8">
+        <createTable tableName="USER_INFO">
+            <column name="ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL" type="VARCHAR2(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PHONE" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Role to user N:M relation table -->
+    <changeSet author="ness" id="db-init9">
+        <createTable tableName="USER_ROLE">
+            <column name="USER_ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ROLE_ID" type="NUMBER(*, 0)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Tables primary keys -->
+    <changeSet author="ness" id="db-init10">
+        <addPrimaryKey tableName="ROLES" columnNames="ID" constraintName="ROLES_PK"/>
+    </changeSet>
+
+    <changeSet author="ness" id="db-init11">
+        <addPrimaryKey columnNames="ID" constraintName="USERINFO_PK" tableName="USER_INFO"/>
+    </changeSet>
+
+    <changeSet author="ness" id="db-init12">
+        <addPrimaryKey columnNames="ID" constraintName="USERS_PK"  tableName="USERS"/>
+    </changeSet>
+
+    <!-- Foreign key -->
+    <changeSet author="ness" id="db-init13">
+        <addForeignKeyConstraint baseColumnNames="USERINFO_ID" baseTableName="USERS" constraintName="FK_USERINFO"
+                                 deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+                                 referencedColumnNames="ID" referencedTableName="USER_INFO"/>
+    </changeSet>
+</databaseChangeLog>
