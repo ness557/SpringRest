@@ -5,9 +5,9 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <!-- DB init script-->
-    <include file="classpath:/db/db.changelog-1.0.xml"/>
+    <include file="classpath:/db/db.changelog-1.0.sql"/>
 
     <!-- Insert values script-->
-    <include file="classpath:/db/db.changelog-1.1.xml"/>
+    <include file="classpath:/db/db.changelog-1.1.sql"/>
 
 </databaseChangeLog>
