@@ -1,32 +1,20 @@
 package ness.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Objects;
 
-@Entity
-@Table(name = "user_info")
+@Document(collection = "userinfo")
+
 public class UserInfo {
 
     public UserInfo() {
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "phone")
     private int phone;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -49,15 +37,13 @@ public class UserInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserInfo userInfo = (UserInfo) o;
-        return id == userInfo.id &&
-                phone == userInfo.phone &&
+        return phone == userInfo.phone &&
                 Objects.equals(email, userInfo.email) ;
     }
 
     @Override
     public String toString() {
         return "UserInfo{" +
-                "id=" + id +
                 ", email='" + email + '\'' +
                 ", phone=" + phone +
                 '}';

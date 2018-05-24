@@ -4,23 +4,20 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="
-		http://www.springframework.org/schema/beans
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
     	http://www.springframework.org/schema/beans/spring-beans.xsd
     	http://www.springframework.org/schema/mvc
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd
     	http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/data/jpa
-        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
 
     <context:component-scan base-package="ness" />
 
-    <jpa:repositories base-package="ness.repository" />
 
     <mvc:annotation-driven/>
 
@@ -33,39 +30,50 @@
         <!--<property name="viewNames" value="page-*"/>-->
     </bean>
 
+    <mongo:mongo id="mongo" host="localhost"/>
+    <mongo:db-factory id="mongoDbFactory" dbname="intendship" mongo-ref="mongo" />
 
-    <bean id="hibernateJpaVendorAdapter"
-          class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-
-    <!-- Configure the entity manager factory bean -->
-    <bean id="entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
-        <!-- Set JPA properties -->
-        <property name="jpaProperties">
-            <props>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-                <prop key="hibernate.show_sql">${show_sql}</prop>
-                <prop key="hibernate.enable_lazy_load_no_trans">${hibernate.enable_lazy_load_no_trans}</prop>
-            </props>
-        </property>
-        <property name="packagesToScan" value="ness.model" />
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
     </bean>
 
-    <!-- Configure the transaction manager bean -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <mongo:repositories
+            base-package="ness.repository" mongo-template-ref="mongoTemplate"/>
+
+    <!--<bean id="hibernateJpaVendorAdapter"-->
+          <!--class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />-->
+
+    <!--&lt;!&ndash; Configure the entity manager factory bean &ndash;&gt;-->
+    <!--<bean id="entityManagerFactory"-->
+          <!--class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">-->
+        <!--<property name="dataSource" ref="dataSource" />-->
+        <!--<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />-->
+        <!--&lt;!&ndash; Set JPA properties &ndash;&gt;-->
+        <!--<property name="jpaProperties">-->
+            <!--<props>-->
+                <!--<prop key="hibernate.dialect">${hibernate.dialect}</prop>-->
+                <!--<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>-->
+                <!--<prop key="hibernate.show_sql">${show_sql}</prop>-->
+                <!--<prop key="hibernate.enable_lazy_load_no_trans">${hibernate.enable_lazy_load_no_trans}</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+        <!--<property name="packagesToScan" value="ness.model" />-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; Configure the transaction manager bean &ndash;&gt;-->
+    <!--<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">-->
+        <!--<property name="entityManagerFactory" ref="entityManagerFactory" />-->
+    <!--</bean>-->
 
     <tx:annotation-driven />
 
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-          p:driverClassName="${jdbc.driver}"
-          p:url="${jdbc.url}"
-          p:username="${jdbc.username}"
-          p:password="${jdbc.password}" />
+    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"-->
+          <!--p:driverClassName="${jdbc.driver}"-->
+          <!--p:url="${jdbc.url}"-->
+          <!--p:username="${jdbc.username}"-->
+          <!--p:password="${jdbc.password}" />-->
 
 </beans>

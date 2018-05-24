@@ -5,7 +5,6 @@ import ness.model.Role;
 import ness.model.User;
 import ness.model.UserInfo;
 import ness.service.RoleService;
-import ness.service.UserInfoService;
 import ness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +23,11 @@ import java.util.Set;
 public class UserWebController {
 
     private UserService userService;
-    private UserInfoService infoService;
     private RoleService roleService;
 
     @Autowired
-    public UserWebController(UserService userService, UserInfoService userInfoService, RoleService roleService) {
+    public UserWebController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.infoService = userInfoService;
         this.roleService = roleService;
     }
 
@@ -80,7 +77,6 @@ public class UserWebController {
     public String saveUser(@ModelAttribute("user") User user, BindingResult result1,
                            @ModelAttribute("rolesString") String roles, BindingResult result2) {
 
-        System.out.println(result1 + "\n" + result2);
         Set<Role> roleSet = new HashSet<>();
 
         for (String roleName: roles.split(",")) {
@@ -91,7 +87,10 @@ public class UserWebController {
 
         user.setRoles(roleSet);
 
-        userService.saveOrUpdate(user);
+        if(user.getId() == 0){
+            userService.addUser(user);
+        } else
+            userService.updateUser(user);
 
         return "redirect:list";
     }

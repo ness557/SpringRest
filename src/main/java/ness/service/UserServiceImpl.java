@@ -1,8 +1,8 @@
 package ness.service;
 
 import ness.model.User;
-import ness.model.UserInfo;
-import ness.repository.UserCrudRepository;
+import ness.repository.SequenceRepository;
+import ness.repository.UserMongoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,21 +12,22 @@ import java.util.logging.Logger;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserCrudRepository repository;
+    private SequenceRepository sequenceRepository;
+    private UserMongoRepository repository;
     private Logger logger = Logger.getLogger(getClass().getName());
 
     @Autowired
-    public UserServiceImpl(UserCrudRepository userCrudRepository) {
+    public UserServiceImpl(UserMongoRepository userCrudRepository, SequenceRepository sequenceRepository) {
         this.repository = userCrudRepository;
+        this.sequenceRepository = sequenceRepository;
     }
 
     @Override
     public int addUser(User user) {
+        user.setId(sequenceRepository.getNextSeqId(SeqKeys.USER_SEQ));
         logger.info("Trying to add user " + user);
 
-        boolean isExists = repository.existsById(user.getId());
-
-        if (!isExists && repository.save(user) != null) {
+        if (repository.save(user) != null) {
             logger.info("user added");
             return 1;
         }
@@ -66,20 +67,6 @@ public class UserServiceImpl implements UserService {
         }
         logger.info("user NOT deleted");
         return 0;
-    }
-
-    @Override
-    public int saveOrUpdate(User user) {
-        logger.info("Trying to save or update user " + user);
-
-        user = repository.save(user);
-        if (user != null) {
-            logger.info("user updated");
-            return 1;
-        } else {
-            logger.info("user NOT updated");
-            return 0;
-        }
     }
 
     @Override

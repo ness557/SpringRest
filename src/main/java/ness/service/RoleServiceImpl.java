@@ -1,7 +1,8 @@
 package ness.service;
 
 import ness.model.Role;
-import ness.repository.RoleCrudRepository;
+import ness.repository.RoleMongoRepository;
+import ness.repository.SequenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,21 +12,22 @@ import java.util.logging.Logger;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private RoleCrudRepository repository;
+    private SequenceRepository sequenceRepository;
+    private RoleMongoRepository repository;
     private Logger logger = Logger.getLogger(getClass().getName());
 
     @Autowired
-    public RoleServiceImpl(RoleCrudRepository roleCrudRepository){
+    public RoleServiceImpl(RoleMongoRepository roleCrudRepository, SequenceRepository sequenceRepository){
         this.repository = roleCrudRepository;
+        this.sequenceRepository = sequenceRepository;
     }
 
     @Override
     public int addRole(Role role) {
         logger.info("Trying to add role " + role);
 
-        boolean isExists = repository.existsById(role.getId());
-
-        if (!isExists && repository.save(role) != null) {
+        role.setId(sequenceRepository.getNextSeqId(SeqKeys.ROLE_SEQ));
+        if (repository.save(role) != null) {
             logger.info("Role added");
             return 1;
         }

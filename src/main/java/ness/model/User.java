@@ -1,34 +1,25 @@
 package ness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@Entity
-@Table(name = "users")
+@Document(collection = "user")
+
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
     private String firstName;
 
-    @Column
     private String lastName;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public User() {
@@ -74,25 +65,28 @@ public class User {
         this.roles = roles;
     }
 
-    public boolean addRole(Role role){
+    public boolean addRole(Role role) {
         return roles.add(role);
     }
 
-    public boolean removeRole(Role role){
+    public boolean removeRole(Role role) {
         return roles.remove(role);
     }
 
-    public String getRolesString(){
+    public String getRolesString() {
 
-        StringBuilder buf = new StringBuilder();
-        for (Role role: roles) {
-            buf.append(role.getName());
-            buf.append(", ");
+        if(!roles.isEmpty() && !roles.contains(null)) {
+            System.out.println(roles);
+            StringBuilder buf = new StringBuilder();
+            for (Role role : roles) {
+                buf.append(role.getName());
+                buf.append(", ");
+
+            }
+            String res = buf.toString();
+            return res.substring(0, res.length() - 2);
         }
-        String res = buf.toString();
-        if(res.isEmpty())
-            return "";
-        return res.substring(0, res.length()-2);
+        return "";
     }
 
     @Override
