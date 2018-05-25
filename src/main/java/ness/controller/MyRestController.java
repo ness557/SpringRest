@@ -9,6 +9,8 @@ import ness.service.StudentService;
 import ness.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -32,6 +34,7 @@ public class MyRestController {
         this.roleService = roleService;
     }
 
+    // roles
     @RequestMapping(value = "/roles", method = RequestMethod.GET)
     public Object getRole(@RequestParam(value = "id", required = false) Integer id) {
         if (id != null) {
@@ -41,29 +44,31 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/roles", method = RequestMethod.PUT)
-    public int putRole(@RequestParam(value = "name") String name) {
+    public ResponseEntity putRole(@RequestBody Role role) {
 
-        Role role = new Role();
-        role.setName(name);
-        return roleService.addRole(role);
+        if(roleService.addRole(role) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(value = "/roles", method = RequestMethod.DELETE)
-    public int deleteRole(@RequestParam(value = "id") int id) {
+    public ResponseEntity deleteRole(@RequestParam(value = "id") int id) {
 
-        return roleService.removeRole(id);
+        if( roleService.removeRole(id) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
-    public int updateRole(@RequestParam(value = "id") int id,
-                          @RequestParam(value = "name") String name) {
+    public ResponseEntity updateRole(@RequestBody Role role) {
 
-        Role role = new Role();
-        role.setId(id);
-        role.setName(name);
-        return roleService.updateRole(role);
+        if(roleService.updateRole(role) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
+    // users
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public Object getUser(@RequestParam(value = "id", required = false) Integer id) {
         if (id != null)
@@ -73,96 +78,63 @@ public class MyRestController {
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.PUT)
-    public int addUser(@RequestParam(value = "username") String username,
-                       @RequestParam(value = "password") String password,
-                       @RequestParam(value = "email") String email,
-                       @RequestParam(value = "phone") int phone,
-                       @RequestParam(value = "roles") String roles) {
+    public ResponseEntity addUser(@RequestBody User user) {
 
-        UserInfo info = new UserInfo();
-        info.setEmail(email);
-        info.setPhone(phone);
-
-        User user = new User();
-        user.setUserInfo(info);
-        user.setUsername(username);
-        user.setPassword(password);
-
-        Set<Role> roleSet = new HashSet<>();
-
-        for (String roleName : roles.split(",")) {
-            Role role = roleService.findRoleByName(
-                    StringUtils.deleteWhitespace(roleName));
-            roleSet.add(role);
-        }
-
-        user.setRoles(roleSet);
-
-        return userService.saveOrUpdate(user);
+        if(userService.addUser(user) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public int updateUser(@RequestParam(value = "id") Integer id,
-                          @RequestParam(value = "username") String username,
-                          @RequestParam(value = "password") String password,
-                          @RequestParam(value = "email") String email,
-                          @RequestParam(value = "phone") int phone,
-                          @RequestParam(value = "roles") String roles) {
+    public ResponseEntity updateUser(@RequestBody User user) {
 
-        User user = userService.getUserById(id);
-        if (user == null)
-            return 0;
-
-        user.getUserInfo().setEmail(email);
-        user.getUserInfo().setPhone(phone);
-        user.setUsername(username);
-        user.setPassword(password);
-
-        Set<Role> roleSet = new HashSet<>();
-
-        for (String roleName : roles.split(",")) {
-            Role role = roleService.findRoleByName(
-                    StringUtils.deleteWhitespace(roleName));
-            roleSet.add(role);
-        }
-
-        user.setRoles(roleSet);
-
-        return userService.saveOrUpdate(user);
+        if(userService.updateUser(user) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
+    @RequestMapping(value = "/users", method = RequestMethod.DELETE)
+    public ResponseEntity deleteUser(@RequestParam(value = "id") int id) {
+
+        if( userService.removeUser(id) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
+    }
+
+
+    // students
     @RequestMapping(value = "/students", method = RequestMethod.GET)
-    public List<Student> getStudent(@RequestParam(value = "id", required = false) Integer id) {
+    public Object getStudent(@RequestParam(value = "id", required = false) Integer id) {
 
         if (id != null)
-            return new LinkedList<Student>() {{
-                add(studentService.getStudentById(id));
-            }};
+            return studentService.getStudentById(id);
         else
             return studentService.getStudents();
 
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.PUT)
-    public int putStudent(@RequestParam(value = "id") int id,
-                          @RequestParam(value = "name") String name,
-                          @RequestParam(value = "group") String group) {
+    public ResponseEntity putStudent(@RequestBody Student student) {
 
-        return studentService.addStudent(new Student(id, name, group));
+        if(studentService.addStudent(student) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.DELETE)
-    public int deleteStudent(@RequestParam(value = "id") int id){
+    public ResponseEntity deleteStudent(@RequestParam(value = "id") int id){
 
-        return studentService.removeStudent(id);
+        if(studentService.removeStudent(id) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
 
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.POST)
-    public int updateStudent(@RequestParam(value = "id") int id,
-                             @RequestParam(value = "name") String name,
-                             @RequestParam(value = "group") String group){
+    public ResponseEntity updateStudent(@RequestBody Student student){
 
-        return studentService.updateStudent(new Student(id, name, group));
+        if(studentService.updateStudent(student) == 1)
+            return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 }

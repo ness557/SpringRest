@@ -1,5 +1,6 @@
 package ness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class Role implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @JsonManagedReference
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             mappedBy = "roles")
     private Set<User> users = new HashSet<>();
