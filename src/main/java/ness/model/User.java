@@ -1,30 +1,37 @@
 package ness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "users")
-public class User {
+@XmlRootElement
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
-    private String firstName;
+    private String username;
 
     @Column
-    private String lastName;
+    private String password;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private UserInfo userInfo;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -42,20 +49,20 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public UserInfo getUserInfo() {
@@ -101,8 +108,8 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return id == user.id &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
                 Objects.equals(userInfo, user.userInfo) &&
                 Objects.equals(roles, user.roles);
     }
@@ -111,8 +118,8 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", firstName='" + username + '\'' +
+                ", lastName='" + password + '\'' +
                 ", userInfo=" + userInfo +
                 ", roles=" + roles +
                 '}';

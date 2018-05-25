@@ -1,18 +1,17 @@
 package ness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +20,7 @@ public class Role {
     @Column(name = "name")
     private String name;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY,
             mappedBy = "roles")
     private Set<User> users = new HashSet<>();
@@ -44,6 +44,7 @@ public class Role {
         this.name = name;
     }
 
+    @XmlTransient
     public Set<User> getUsers() {
         return users;
     }

@@ -1,14 +1,12 @@
 package ness.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_info")
-public class UserInfo {
-
-    public UserInfo() {
-    }
+public class UserInfo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +17,9 @@ public class UserInfo {
 
     @Column(name = "phone")
     private int phone;
+
+    public UserInfo() {
+    }
 
     public int getId() {
         return id;

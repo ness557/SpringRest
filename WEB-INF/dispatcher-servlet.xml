@@ -17,22 +17,21 @@
         http://www.springframework.org/schema/data/jpa
         http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-
     <context:component-scan base-package="ness" />
 
     <jpa:repositories base-package="ness.repository" />
 
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="jacksonObjectMapper" class="ness.model.MyJsonMapper" />
 
     <context:property-placeholder location="WEB-INF/application.properties"/>
-
-    <!-- Define Spring MVC view resolver -->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/view/" />
-        <property name="suffix" value=".jsp" />
-        <!--<property name="viewNames" value="page-*"/>-->
-    </bean>
-
 
     <bean id="hibernateJpaVendorAdapter"
           class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
@@ -60,7 +59,6 @@
     </bean>
 
     <tx:annotation-driven />
-
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
           p:driverClassName="${jdbc.driver}"

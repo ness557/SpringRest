@@ -12,16 +12,11 @@
 
     <properties>
         <spring.version>4.3.15.RELEASE</spring.version>
+        <jackson.version>2.9.4</jackson.version>
     </properties>
 
-    <!--<parent>-->
-    <!--<groupId>org.springframework.boot</groupId>-->
-    <!--<artifactId>spring-boot-starter-parent</artifactId>-->
-    <!--<version>2.0.2.RELEASE</version>-->
-    <!--</parent>-->
-
     <build>
-        <finalName>SpringRestWebPage</finalName>
+        <finalName>SpringRest</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -59,7 +54,7 @@
                 <version>2.2</version>
                 <configuration>
                     <server>Tomcat</server>
-                    <path>/springRestWeb</path>
+                    <path>/springRest</path>
                 </configuration>
             </plugin>
         </plugins>
@@ -119,13 +114,18 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.9.4</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.9.4</version>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
@@ -152,17 +152,7 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>1.11.11.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>RELEASE</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>

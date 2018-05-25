@@ -40,8 +40,8 @@ public class UserServiceImpl implements UserService {
 
         User userr = repository.getById(user.getId());
         if (userr != null) {
-            userr.setFirstName(user.getFirstName());
-            userr.setLastName(user.getFirstName());
+            userr.setUsername(user.getUsername());
+            userr.setPassword(user.getPassword());
             userr.setRoles(user.getRoles());
             user.setUserInfo(user.getUserInfo());
             repository.save(user);
