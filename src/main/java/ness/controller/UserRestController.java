@@ -19,9 +19,12 @@ public class UserRestController {
 
     // users
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public Object getUser(@RequestParam(value = "id", required = false) Integer id) {
+    public Object getUser(@RequestParam(value = "id", required = false) Integer id,
+                          @RequestParam(value = "username", required = false) String username) {
         if (id != null)
             return userService.getUserById(id);
+        else if(username != null)
+            return userService.getUserByUsername(username);
         else
             return userService.getUserList();
     }
