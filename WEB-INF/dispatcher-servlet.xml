@@ -31,7 +31,12 @@
 
     <bean id="jacksonObjectMapper" class="ness.model.MyJsonMapper" />
 
-    <context:property-placeholder location="WEB-INF/application.properties"/>
+    <!--<context:property-placeholder location="WEB-INF/application.properties"/>-->
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+        <property name="locations" value="WEB-INF/application.properties"/>
+    </bean>
 
     <bean id="hibernateJpaVendorAdapter"
           class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />

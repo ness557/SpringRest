@@ -8,9 +8,7 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
@@ -122,5 +120,16 @@ public class User implements Serializable {
                 ", userInfo=" + userInfo +
                 ", roles=" + roles +
                 '}';
+    }
+
+    public Map<String, String> toMap(){
+
+        Map<String, String> map = new HashMap<>();
+
+        map.put("username", this.username);
+        map.put("password", this.password);
+        map.put("roles", getRolesString());
+
+        return map;
     }
 }

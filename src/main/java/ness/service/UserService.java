@@ -12,5 +12,6 @@ public interface UserService {
     int saveOrUpdate(User user);
     int removeUser(int id);
     User getUserById(int id);
+    User getUserByUsername(String username);
     List<User> getUserList();
 }

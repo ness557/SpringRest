@@ -111,6 +111,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByUsername(String username) {
+        return repository.findByUsername(username);
+    }
+
+    @Override
     public List<User> getUserList() {
         logger.info("Trying to get users list");
 
