@@ -1,6 +1,7 @@
 package ness.controller;
 
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
 import ness.security.TokenService;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.security.sasl.AuthenticationException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/token")
@@ -25,9 +28,15 @@ public class TokenController {
 
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public User getUser(@RequestParam String token){
+    public JSONObject getUser(@RequestParam String token){
 
-        return tokenService.getUser(token);
+        User user = tokenService.getUser(token);
+
+        Map<String, String> map = new HashMap();
+        map.put("username" , user.getUsername());
+        map.put("password", user.getPassword());
+
+        return new JSONObject(map);
     }
 
     @RequestMapping(value = "/getToken", method = RequestMethod.GET)
