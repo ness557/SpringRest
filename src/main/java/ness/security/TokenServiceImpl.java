@@ -72,9 +72,11 @@ public class TokenServiceImpl implements TokenService {
         Map<String, Object> tokenData =
                 (Map) Jwts.parser().setSigningKey(secret).parse(token).getBody();
 
-        return new User(
-                tokenData.get("username").toString(),
-                tokenData.get("password").toString(),
-                new ArrayList<>());
-        }
+        if (tokenData != null)
+            return new User(
+                    tokenData.get("username").toString(),
+                    tokenData.get("password").toString(),
+                    new ArrayList<>());
+        return null;
+    }
 }

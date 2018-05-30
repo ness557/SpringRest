@@ -1,8 +1,11 @@
 package ness.controller;
 
 
+import io.jsonwebtoken.MalformedJwtException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import ness.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +31,33 @@ public class TokenController {
 
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public JSONObject getUser(@RequestParam String token){
+    public ResponseEntity<JSONObject> getUser(@RequestParam String token){
 
-        User user = tokenService.getUser(token);
 
-        if(user != null) {
-
+        try {
+            User user = tokenService.getUser(token);
             Map<String, String> map = new HashMap();
             map.put("username", user.getUsername());
             map.put("password", user.getPassword());
 
-            return new JSONObject(map);
+            return new ResponseEntity<>(new JSONObject(map), HttpStatus.OK);
+        } catch (MalformedJwtException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     @RequestMapping(value = "/getToken", method = RequestMethod.GET)
-    public String getToken(@RequestParam String username,
+    public ResponseEntity<String> getToken(@RequestParam String username,
                            @RequestParam String password){
 
-        String token = null;
         try {
-            token = tokenService.getToken(username, password);
+            String token = tokenService.getToken(username, password);
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (AuthenticationException e) {
             e.printStackTrace();
-        }
 
-        return token;
+            return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
