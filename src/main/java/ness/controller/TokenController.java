@@ -32,11 +32,15 @@ public class TokenController {
 
         User user = tokenService.getUser(token);
 
-        Map<String, String> map = new HashMap();
-        map.put("username" , user.getUsername());
-        map.put("password", user.getPassword());
+        if(user != null) {
 
-        return new JSONObject(map);
+            Map<String, String> map = new HashMap();
+            map.put("username", user.getUsername());
+            map.put("password", user.getPassword());
+
+            return new JSONObject(map);
+        }
+        return null;
     }
 
     @RequestMapping(value = "/getToken", method = RequestMethod.GET)
