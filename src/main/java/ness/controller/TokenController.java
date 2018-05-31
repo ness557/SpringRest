@@ -25,14 +25,13 @@ public class TokenController {
     private TokenService tokenService;
 
     @Autowired
-    public TokenController(@Qualifier("theTokenService") TokenService tokenService){
+    public TokenController(@Qualifier("theTokenService") TokenService tokenService) {
         this.tokenService = tokenService;
     }
 
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public ResponseEntity<JSONObject> getUser(@RequestParam String token){
-
+    public ResponseEntity<JSONObject> getUser(@RequestParam String token) {
 
         try {
             User user = tokenService.getUser(token);
@@ -49,7 +48,7 @@ public class TokenController {
 
     @RequestMapping(value = "/getToken", method = RequestMethod.GET)
     public ResponseEntity<String> getToken(@RequestParam String username,
-                           @RequestParam String password){
+                                           @RequestParam String password) {
 
         try {
             String token = tokenService.getToken(username, password);
@@ -57,7 +56,7 @@ public class TokenController {
         } catch (AuthenticationException e) {
             e.printStackTrace();
 
-            return new ResponseEntity<>("", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }
